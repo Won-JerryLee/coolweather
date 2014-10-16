@@ -65,19 +65,26 @@ public class ChooseAreaActivity extends Activity {
 	 * 当前选中的级别
 	 */
 	private int currentLevel;
-
+	/**
+	 * 判断是否由选择城市按钮跳转到ChooseAreaActivity
+	 */
+	private boolean isFromWeatherActivity;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		/**
-		 * 判断是否之前选择过城市
-		 */
-		SharedPreferences sPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-		if(sPreferences.getBoolean("city_selected", false)){
-			Intent intent = new Intent(ChooseAreaActivity.this, WeatherActivity.class);
-			startActivity(intent);
-			finish();
-			return;
+		isFromWeatherActivity = getIntent().getBooleanExtra("isFromWeatherActivity", false);
+		if(!isFromWeatherActivity){
+			/**
+			 * 判断是否之前选择过城市
+			 */
+			SharedPreferences sPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+			if(sPreferences.getBoolean("city_selected", false)){
+				Intent intent = new Intent(ChooseAreaActivity.this, WeatherActivity.class);
+				startActivity(intent);
+				finish();
+				return;
+			}
 		}
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.choose_area);
@@ -242,7 +249,7 @@ public class ChooseAreaActivity extends Activity {
 	}
 	
 	/**
-	 * 捕获back按键，根据当前的级别来判断，应该是返回市列表、省列表或者直接退出
+	 * 捕获back按键，根据当前的级别来判断，应该是返回市列表、省列表或者返回WeatherActivity或者推出
 	 */
 	@Override
 	public void onBackPressed() {
@@ -250,7 +257,11 @@ public class ChooseAreaActivity extends Activity {
 			querryCity();
 		}else if(currentLevel == LEVEL_CITY){
 			querryProvince();
-		}else{
+		}else if(isFromWeatherActivity){
+			Intent intent = new Intent(this, WeatherActivity.class);
+			startActivity(intent);
+			finish();
+		}else if(currentLevel == LEVEL_PROVINCE && !isFromWeatherActivity){
 			finish();
 		}
 	}

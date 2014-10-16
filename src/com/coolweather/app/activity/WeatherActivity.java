@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.view.View;
@@ -102,7 +103,7 @@ public class WeatherActivity extends Activity implements OnClickListener {
 					Utility.handleWeatherResponse(WeatherActivity.this, response);
 					runOnUiThread(new Runnable() {
 						public void run() {
-							publishTimeText.setText("º”‘ÿ ß∞‹");
+							showWeatherInfo();
 						}
 					});
 				}
@@ -113,6 +114,7 @@ public class WeatherActivity extends Activity implements OnClickListener {
 				runOnUiThread(new Runnable() {
 					public void run() {
 						publishTimeText.setText("º”‘ÿ ß∞‹");
+						weatherInfoLayout.setVisibility(View.INVISIBLE);
 					}
 				});
 			}
@@ -153,10 +155,18 @@ public class WeatherActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.switch_City:
-
+			Intent intent = new Intent(this, ChooseAreaActivity.class);
+			intent.putExtra("isFromWeatherActivity", true);
+			startActivity(intent);
+			finish();
 			break;
 		case R.id.refresh_weather:
-
+			publishTimeText.setText("º”‘ÿ÷–...");
+			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+			String weatherCode = sharedPreferences.getString("weather_code", "");
+			if(!TextUtils.isEmpty(weatherCode)){
+				getWeatherInfo(weatherCode);
+			}
 			break;
 		}
 	}
