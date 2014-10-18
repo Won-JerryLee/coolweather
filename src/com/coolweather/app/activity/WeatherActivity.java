@@ -1,10 +1,11 @@
 package com.coolweather.app.activity;
 
-import com.coolweather.app.R;
+
 import com.coolweather.app.receiver.AutoUpdateService;
 import com.coolweather.app.util.HttpCallBackListener;
 import com.coolweather.app.util.HttpUtil;
 import com.coolweather.app.util.Utility;
+import com.jer.coolweather.R;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -131,8 +132,8 @@ public class WeatherActivity extends Activity implements OnClickListener {
 		publishTimeText.setText("今天"+sPreferences.getString("publish_time", "")+"发布");
 		currentDateText.setText(sPreferences.getString("current_date", ""));
 		weatherDespText.setText(sPreferences.getString("weather_desp", ""));
-		temp1Text.setText(sPreferences.getString("temp1", ""));
-		temp2Text.setText(sPreferences.getString("temp2", ""));
+		temp1Text.setText(sPreferences.getString("temp2", ""));
+		temp2Text.setText(sPreferences.getString("temp1", ""));
 		weatherInfoLayout.setVisibility(View.VISIBLE);
 		/**
 		 * 开启后台更新服务
